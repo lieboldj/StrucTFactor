@@ -51,8 +51,15 @@ for l, mod in enumerate(mode):
                 with open(f'../../results/{exp}{clu}_{rat}_{mod}{tf}/result_info.txt', 'r') as file:
                     text = file.read()
             else:
-                print(f'{exp}{clu}_{rat}_{mod}')
-                continue
+                path_name = exp.split('_')[1]
+                if os.path.exists(f'../../benchmark/DeepReg/results/{path_name}/{clu}_{rat}_Com/result_info.txt'):
+                    with open(f'../../benchmark/DeepReg/results/{path_name}/{clu}_{rat}_Com/result_info.txt', 'r') as file:
+                        text = file.read()
+
+                else:
+                    print(f'{exp}{clu}_{rat}_{mod}')
+                    continue
+
 
             # Extract information             
             result_info = extract_info(text)
@@ -124,7 +131,7 @@ if fold_plot:
     
     plt.xticks(range(5), range(1,6))#, x_ticks) 
 
-    plt.xlabel(f"Cross-validation fold of the $D_7$ dataset", labelpad=15)
+    plt.xlabel(f"Cross-validation fold of the $D_1$ dataset", labelpad=15)
     plt.ylabel(eval_metric, labelpad=15)
     plt.ylim(0, 1)
     plt.legend(["StrucTFactor", "DeepTFactor"], loc="lower right")

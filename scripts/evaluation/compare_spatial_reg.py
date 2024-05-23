@@ -1,4 +1,5 @@
 import matplotlib.pyplot as plt
+import csv
 import re
 import os
 
@@ -6,6 +7,7 @@ import os
 def extract_info(text):
     info = {}
     folds = re.findall(r'Fold: (\d+).*?accuracy: (\d+\.\d+), sensitivity: (\d+\.\d+), specificity: (\d+\.\d+), recall: (\d+\.\d+).*?ROC curve \(area = (\d+\.\d+)\).*?AUPRC \(AP\): (\d+\.\d+).*?MCC: (\d+\.\d+)', text, re.DOTALL)
+    
     for i, fold in enumerate(folds):
         info[f'Fold {i}'] = {
             'accuracy': float(fold[1]),
@@ -20,13 +22,13 @@ def extract_info(text):
 
 clust = ["03", "No"]
 ratio = ["norm","small","large"]
-mode = ["seq", "spatial"]
-exps = ["CV_AFfiltered_"]#, "CV_AFall_"]#,"CV_AFfiltered_expTFs_clu"]
+mode = ["X", "spatial"] # X = DeepReg
+exps = ["CV_AFfiltered"]#_expTFs_clu"]
 # if ../plots not exists, create it
 if not os.path.exists("../plots"):
     os.makedirs("../plots")
 fig, ax = plt.subplots()
-eval_modes = ["AU-PRC", "MCC"]
+eval_modes = ["AU-PRC", "MCC", "AU-ROC"]
 for eval_mode in eval_modes:
     seq_mccs = []
     spatial_mccs = []
@@ -38,15 +40,16 @@ for eval_mode in eval_modes:
         for exp in exps:
             for rat in ratio:
                 for clu in clust:
-                       
+                    print(f'{exp}{clu}_{rat}_{mod}')
                     # Read text file
-                    if os.path.exists(f'../../results/{exp}clu{clu}_{rat}_{mod}_Com/result_info.txt'):
-                        with open(f'../../results/{exp}clu{clu}_{rat}_{mod}_Com/result_info.txt', 'r') as file:
+                    if os.path.exists(f'../../results/{exp}_expTFs_clu{clu}_{rat}_{mod}_Com/result_info.txt'):
+                        with open(f'../../results/{exp}_expTFs_clu{clu}_{rat}_{mod}_Com/result_info.txt', 'r') as file:
                             text = file.read()
+                    
                     else:
                         path_name = exp.split('_')[1]
-                        if os.path.exists(f'../../results/{exp}expTFs_clu{clu}_{rat}_{mod}_Com/result_info.txt'):
-                            with open(f'../../results/{exp}expTFs_clu{clu}_{rat}_{mod}_Com/result_info.txt', 'r') as file:
+                        if os.path.exists(f'../../benchmark/DeepReg/results/{path_name}/{clu}_{rat}_Com/result_info.txt'):
+                            with open(f'../../benchmark/DeepReg/results/{path_name}/{clu}_{rat}_Com/result_info.txt', 'r') as file:
                                 text = file.read()
 
                         else:
@@ -57,6 +60,10 @@ for eval_mode in eval_modes:
                     average_fold = {}                
                     result_info = extract_info(text)
                     num_folds = len(result_info)
+                    if num_folds < 5:
+                        if mod == "X":
+                            seq_mccs.append(0.0)
+                        continue
                     for fold in result_info.values():
                         for key, value in fold.items():
                             if key not in average_fold:
@@ -67,7 +74,7 @@ for eval_mode in eval_modes:
                     for key in average_fold:
                         average_fold[key] /= num_folds
 
-                    if mod == "seq":
+                    if mod == "X":
                         seq_mccs.append(average_fold[eval_mode])
                     else:
                         spatial_mccs.append(average_fold[eval_mode])
@@ -98,7 +105,7 @@ for eval_mode in eval_modes:
         ax.scatter(seq_mccs[i], spatial_mccs[i], c=colors[i], label=legend_labels[i],\
                    marker=markers[i], s=40, alpha=alpha)
 
-ax.set_xlabel("DeepTFactor")
+ax.set_xlabel("DeepReg")
 ax.set_ylabel("StrucTFactor")
 ax.set_xlim([0, 1])
 ax.set_ylim([0, 1])
@@ -132,8 +139,8 @@ legend = ax.legend(loc='upper left', bbox_to_anchor=(1, 1), title='Experiment (C
 for handle in legend.legendHandles:
     handle.set_sizes([30.0])  # Set marker size in legend
 leg = plt.legend(legend_elements, labels, loc='lower left', bbox_to_anchor=(1.02, 0.05))
-plt.title("Comparison of StrucTFactor to DeepTFactor".format(exp.split('_')[1]))
+plt.title("Comparison of StrucTFactor to DeepReg".format(exp.split('_')[1]))
 
-plt.savefig(f"../plots/scatter{exp.split('_')[1]}.png", bbox_inches='tight')
-print(f"../plots/scatter{exp.split('_')[1]}.png")
+plt.savefig(f"../plots/DeepReg/scatter{exp.split('_')[1]}.png", bbox_inches='tight')
+print(f"../plots/DeepReg/scatter{exp.split('_')[1]}.png")
 
