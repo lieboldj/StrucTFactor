@@ -51,6 +51,13 @@ if __name__ == '__main__':
         os.makedirs(output_dir)
 
     torch.set_num_threads(num_cpu)
+    # add deterministic behavior
+    torch.manual_seed(42)
+    np.random.seed(42)
+    random.seed(42)
+    torch.backends.cudnn.deterministic = True
+    torch.backends.cudnn.benchmark = False
+    
     # seperated into spatial models (altered deepTFactor) and 
     # sequence model (reimplemented original deepTFactor)
     if spatial_file != None:

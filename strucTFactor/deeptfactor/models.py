@@ -5,7 +5,6 @@ import torch.nn as nn
 class DeepTFactor(nn.Module):
     def __init__(self, spatial_mode, out_features=[0] ):
         super(DeepTFactor, self).__init__()
-        self.explainECs = out_features
         # different spatial optians and their various layer options (to keep the same ratios of length and width of the kernel)
         if spatial_mode == 3:
             self.layer_info = [[12, 12, 48], [36, 24, 12], [48, 12, 12]]

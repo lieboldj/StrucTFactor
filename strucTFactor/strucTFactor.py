@@ -50,6 +50,11 @@ if __name__ == '__main__':
         os.makedirs(output_dir)
 
     torch.set_num_threads(num_cpu)
+    torch.manual_seed(42)
+    np.random.seed(42)
+    random.seed(42)
+    torch.backends.cudnn.deterministic = True
+    torch.backends.cudnn.benchmark = False
 
     # Include the datasets into training validation and testing
     

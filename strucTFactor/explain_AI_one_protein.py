@@ -89,10 +89,6 @@ if __name__ == '__main__':
         pseudo_labels = np.zeros((len(protein_seqs)))
         proteinDataset = EnzymeDataset_spatial(protein_seqs, labels, spatial_seqs, spatial_mode)
 
-
-    # extract the sequence of the IDs that are in specialComp from protien_seqs and seq_ids
-    # get the index of the ID in seq_ids
-
     model = DeepTFactor(spatial_mode, out_features=[1],)
     model = model.to(device)
     cutoff = 0.5
@@ -111,9 +107,21 @@ if __name__ == '__main__':
         for x, _ in tqdm(test_loader):
             x = x.type(torch.FloatTensor)
             x_length = x.shape[0]
+            #attributions, _ = captum_ig.attribute(x.to(device), target=0, return_convergence_delta=True)
+            #attributions = attributions.cpu().numpy()
 
-
-            attributions, _ = captum_ig.attribute(x.to(device), target=0, return_convergence_delta=True)
+            x = x.to(device)  # Move input to appropriate device (e.g., GPU)
+            target = 0  # Target class index for attribution
+            
+            # Initialize Integrated Gradients
+            ig = captum_attr.IntegratedGradients(model)
+            model.train()
+            # run in training mode for backward in lstm
+            # Compute attributions
+            attributions = ig.attribute(x, target=target)
+            model.eval()
+            
+            # Move attributions to CPU and convert to numpy
             attributions = attributions.cpu().numpy()
 
             # Store attributions and x_sample for this batch as a pair
@@ -135,8 +143,6 @@ if __name__ == '__main__':
         explain_dict.at[proteinID, "onehot"] = sample_pairs[idx][1].squeeze()[:upto,:]
 
     print("Done!")
-    #save dict to pickle
-    #explain_dict.to_pickle(f"{setting}_{datasettype}_explain_dict.pkl") # Here we have all information for each protein
 
     if create_plot_per_protein:
         # analyse the impact score with the domain information
