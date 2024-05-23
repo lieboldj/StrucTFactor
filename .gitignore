@@ -2,3 +2,16 @@ __pycache__/
 scripts/plots/
 data/
 results/
+strucTFactor/deeptfactor/models_collection.py
+strucTFactor/predictions/
+strucTFactor/AI_isoform/
+strucTFactor/lstm_classifier.py
+strucTFactor/predictTFwithStrucTFactor_*
+strucTFactor/explain_AI_iso*
+strucTFactor/run_cross_valN*
+strucTFactor/model.pt
+strucTFactor/*.pdf
+DeepLearning-_TF/
+analyse_Exp*
+data_pred*
+find_tfs*

@@ -27,6 +27,7 @@ git clone https://github.com/lieboldj/StrucTFactor.git
 conda env create -f stf.yml
 conda activate stf
 ```
+If you want to benchmark with DeepReg, please install tensorflow.
 
 ## Predict TF/non-TF for a pdb file
 Given a pdb file, you run the following to predict whether this protein is a TF: 
@@ -75,6 +76,4 @@ Neuhaus F., Liebold J, Baumbach J, Newaz K (2024). Transcription factor predicti
 
 *Corresponding address:*
 
-Khalique Newaz
-
-khalique.newaz@uni-hamburg.de
+Khalique Newaz, khalique.newaz@uni-hamburg.de
