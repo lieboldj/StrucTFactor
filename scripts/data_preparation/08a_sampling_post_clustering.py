@@ -15,8 +15,8 @@ def process_cluster(filename, TFs):
         if unique in TFs:
             sampled_reps_TF.add(unique)
         else:
-            candidate = members[members.isin(TFs)].dropna()  # Drop NaN values
-            if not candidate.empty:
+            if members['members'].isin(TFs).sum() > 0:
+                candidate = members[members.isin(TFs)]['members'].dropna()  # Drop NaN values
                 sampled_reps_TF.add(candidate.iloc[0])  # Extract value from Series
             else:
                 sampled_reps_nonTF.add(unique)

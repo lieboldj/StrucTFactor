@@ -40,7 +40,7 @@ done
 for clust in "${clust_list[@]}"; do
     for exp in "${exp_setup[@]}"; do
         if [ "$clust" == "03" ]; then
-            comm_list+=("mmseqs easy-cluster uniprot/04_final/${exp}_seqs.fasta ${exp}/${clust} tmp_files/ --min-seq-id 0.3 -c 0.8 --cov-mode 1")
+            comm_list+=("mmseqs easy-cluster uniprot/04_final/${exp}_seqs.fasta ${exp}/${clust} tmp_files/ --min-seq-id 0.3 -c 0.8 --cov-mode 0")
         fi
     done
 done

@@ -87,3 +87,10 @@ fileIN = "../../data/uniprot/01_all_uniprot/uniprot_sprot.dat"
 ID_file = pd.read_csv("../../data/uniprot/05_default_files/AF_ids.tsv", sep="\t", header=0, index_col=0)
 IDs = set(ID_file.index)
 get_info(fileIN, IDs)
+
+# make sure that we only have TFs in this list
+tfs = pd.read_csv('../../data/uniprot/01_all_uniprot/uniprot_TF_ids.tsv', sep='\t', header=None)
+tfs = set(tfs[0])
+dbds = pd.read_csv('../data/uniprot/05_default_files/uniprot_DBD_AFs.tsv', sep='\t')
+dbds = dbds[dbds['ID'].isin(tfs)]
+dbds.to_csv('../data/uniprot/05_default_files/uniprot_DBD_AFs_tfs.tsv', sep='\t', index=False)
