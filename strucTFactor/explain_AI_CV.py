@@ -112,7 +112,7 @@ if __name__ == '__main__':
 
     secondary_pre = "../results/" #'/home/bay9657/thesis/results/final_crossCluster/final_AF_norm'
     spatial_file_sec = '../data/uniprot/04_final/AFall_spatial_str.tsv'
-    domain_df = pd.read_csv("../data/uniprot/05_default_files/uniprot_DBD_AFs.tsv", sep='\t', header=0)
+    domain_df = pd.read_csv("../data/uniprot/05_default_files/uniprot_DBD_AFs_tfs.tsv", sep='\t', header=0)
     domain_df['start'] = domain_df['start'].astype(int)
     domain_df['end'] = domain_df['end'].astype(int)
     parser = argument_parser()
@@ -131,7 +131,7 @@ if __name__ == '__main__':
     #custom_cmap = ListedColormap(cmap_colors)
     specialComp = ["P37682", "Q46855"] #,"P77700"] # comparison to paper YiaU, YqhC and YahB
 
-    column_names = [f"CV_AFfiltered_expTFs_{clu}_norm_seq_Com_score", f"CV_AFfiltered_expTFs_{clu}_norm_spatial_Com_score", f"CV_AFfiltered_expTFs_{clu}_norm_seq_Com_onehot", f"CV_AFfiltered_expTFs_{clu}_norm_spatial_Com_onehot", f"CV_AFfiltered_expTFs_{clu}_norm_seq_Com_attr", f"CV_AFfiltered_expTFs_{clu}_norm_spatial_Com_attr"]
+    column_names = [f"CV_AFfiltered_expTFs_{clu}_norm_seq0_Com_score", f"CV_AFfiltered_expTFs_{clu}_norm_spatial0_Com_score", f"CV_AFfiltered_expTFs_{clu}_norm_seq0_Com_onehot", f"CV_AFfiltered_expTFs_{clu}_norm_spatial0_Com_onehot", f"CV_AFfiltered_expTFs_{clu}_norm_seq0_Com_attr", f"CV_AFfiltered_expTFs_{clu}_norm_spatial0_Com_attr"]
 
     # extract ID series from first column of domain_df
     ID_series = domain_df.iloc[:,0]
@@ -150,18 +150,19 @@ if __name__ == '__main__':
     torch.set_num_threads(num_cpu)
     kernel_size = 1
     #clu = "03"
-    not_preproc = True
+    not_preproc = False
     if not_preproc:
         for foldID in range(5):
             filename = f"Fold_{foldID}_sequences_{setting}_{datasettype}.fasta"
             print(f"Start {filename}")
 
-            for mode in ['spatial']: # add 'seq' if you want to compare to DeepTFactor
+            for mode in ['spatial0','seq0']: # add 'seq' if you want to compare to DeepTFactor
                 fold_directory = f'../data/'
                 protein_data_file = f"{fold_directory}{filename}"
                 print(f"Start with {mode}")
 
-                if mode == 'seq':
+                if mode == 'seq0':
+                    spatial_mode = 0
                     spatial_file = None
                     prefix = secondary_pre + f"CV_AFfiltered_expTFs_{clu}_norm_{mode}_Com/"
 
@@ -170,7 +171,8 @@ if __name__ == '__main__':
                     proteinDataset = EnzymeDataset(protein_seqs, pseudo_labels)
 
                     col_name = f"CV_AFfiltered_expTFs_{clu}_norm_{mode}_Com" #f"no_spatial_{clu}esNo"
-                elif mode == 'spatial':
+
+                elif mode == 'spatial0':
                     spatial_mode = kernel_size
                     spatial_file = spatial_file_sec
                     prefix = secondary_pre + f"CV_AFfiltered_expTFs_{clu}_norm_{mode}_Com/" # secondary_pre + f"/{spatial_filter}_{clu}esNo/"
@@ -237,8 +239,8 @@ if __name__ == '__main__':
         # save the df to a csv file
         df.to_pickle(f"tmp_df_{clu}_all.pkl")
     else:
-        df = pd.read_pickle(f"/cosybio/project/fneuhaus/thesis/results/explainable/tmp_df_clu03_all.pkl")
-        print(df)
+        df = pd.read_pickle(f"tmp_df_{clu}_all.pkl")
+    df = pd.read_pickle(f"tmp_df_{clu}_all.pkl")
 
     no_spatial_domain_sum = []
     secondary_domain_sum = []
@@ -261,9 +263,9 @@ if __name__ == '__main__':
     # extract domain and non-domain information
 
     for ID in df.index:
-        no_spatial_sample_arr = df.loc[ID, f"CV_AFfiltered_expTFs_{clu}_norm_seq_Com_onehot"]
-        no_spatial_attr_arr = df.loc[ID, f"CV_AFfiltered_expTFs_{clu}_norm_seq_Com_attr"]
-        secondary_attr_arr = df.loc[ID, f"CV_AFfiltered_expTFs_{clu}_norm_spatial_Com_attr"]
+        no_spatial_sample_arr = df.loc[ID, f"CV_AFfiltered_expTFs_{clu}_norm_seq0_Com_onehot"]
+        no_spatial_attr_arr = df.loc[ID, f"CV_AFfiltered_expTFs_{clu}_norm_seq0_Com_attr"]
+        secondary_attr_arr = df.loc[ID, f"CV_AFfiltered_expTFs_{clu}_norm_spatial0_Com_attr"]
         #pocket_attr_arr = df.loc[ID, f"pocket2_{clu}esNo_attr"]
 
         upto = np.count_nonzero(no_spatial_sample_arr.squeeze().sum(axis=1))

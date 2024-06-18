@@ -27,7 +27,7 @@ def argument_parser(version=None):
         return s == 'True'
     
     parser = argparse.ArgumentParser()
-    parser.add_argument('-o', '--output_dir', required=True, 
+    parser.add_argument('-o', '--output_dir', required=False, default="./",
                         help='Output directory')
     parser.add_argument('-g', '--gpu', required=False, 
                         default='cpu', help='Specify gpu')
