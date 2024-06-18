@@ -1,7 +1,7 @@
 import requests
 
 # URL of the pre-traiend-model with results to download
-url = "https://figshare.com/ndownloader/files/45006460"
+url = "https://figshare.com/ndownloader/files/47121310"
 
 
 # Send a GET request to the URL
@@ -18,7 +18,7 @@ else:
     print("Failed to download file. Status code:", response.status_code)
 
 # URL of the data folder to download
-url = "https://figshare.com/ndownloader/files/45006457"
+url = "https://figshare.com/ndownloader/files/47121292"
 
 # Send a GET request to the URL
 response = requests.get(url)
