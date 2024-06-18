@@ -2,6 +2,7 @@ __pycache__/
 scripts/plots/
 data/
 results/
+pdb_cov/
 strucTFactor/deeptfactor/models_collection.py
 strucTFactor/predictions/
 strucTFactor/AI_isoform/
@@ -11,7 +12,18 @@ strucTFactor/explain_AI_iso*
 strucTFactor/run_cross_valN*
 strucTFactor/model.pt
 strucTFactor/*.pdf
+strucTFactor/tmp*
 DeepLearning-_TF/
 analyse_Exp*
 data_pred*
 find_tfs*
+check_*
+*.tsv
+scripts/evaluation/compare*.py
+scripts/evaluation/*.tsv
+scripts/evaluation/*.pdf
+scripts/evaluation/*.sh
+scripts/evaluation/*.tex
+scripts/evaluation/results_latex*
+scripts/evaluation/wil.py
+scripts/evaluation/plot_dataset_specific_bar_deepstruct.py
