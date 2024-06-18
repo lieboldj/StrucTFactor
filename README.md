@@ -71,9 +71,9 @@ Here, you can execute the programm of your choice (```./run_all_data.sh```, ```.
 This work is licensed under a Creative Commons Attribution 4.0 International Public License.
 
 ## Reference
-Neuhaus F., Liebold J, Baumbach J, Newaz K (2024). Transcription factor prediction using protein 3D structures.
+Neuhaus F., Liebold J, Geiser J, Kurtz S, Baumbach J, Newaz K (2024). Transcription factor prediction using protein 3D secondary structures.
 
 
-*Corresponding address:*
+*Corresponding author:*
 
 Khalique Newaz, khalique.newaz@uni-hamburg.de
