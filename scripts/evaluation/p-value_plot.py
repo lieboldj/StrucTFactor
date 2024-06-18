@@ -7,7 +7,7 @@ import re
 
 def extract_info(text):
     info = {}
-    folds = re.findall(r'Fold: (\d+).*?accuracy: (\d+\.\d+), sensitivity: (\d+\.\d+), specificity: (\d+\.\d+), recall: (\d+\.\d+).*?TP: (\d+).*?FP: (\d+).*?TN: (\d+).*?FN: (\d+).*?ROC curve \(area = (\d+\.\d+)\).*?AUPRC \(AP\): (\d+\.\d+).*?MCC: (\d+\.\d+)', text, re.DOTALL)
+    folds = re.findall(r'Fold: (\d+)\naccuracy: (nan|\d+\.\d+), sensitivity: (nan|\d+\.\d+), specificity: (nan|\d+\.\d+), recall: (nan|\d+\.\d+).*?TP: (\d+).*?FP: (\d+).*?TN: (\d+).*?FN: (\d+).*?ROC curve \(area = (\d+\.\d+)\).*?AUPRC \(AP\): (nan|\d+\.\d+).*?MCC: (nan|-?\d+\.\d+)', text, re.DOTALL)
     for i, fold in enumerate(folds):
         info[f'Fold {i}'] = {
             'accuracy': float(fold[1]),
@@ -31,7 +31,7 @@ ratio = ["norm","small","large"]#,"small","large"]
 exps = ["CV_AFfiltered_expTFs_clu", "CV_AFall_expTFs_clu"]#,"CV_AFfiltered_expTFs_clu"]"CV_AFfiltered_expTFs_clu", 
 tfs = ["_Com"]
 tf = tfs[0]
-mode = ["spatial", "reg"] # use the term "reg" here when comparing to DeepReg
+mode = ["spatial0", "seq0"] # use the term "reg" here when comparing to DeepReg
 eval_metric = "AU-ROC"
 if not os.path.exists("../plots"):
     os.makedirs("../plots")
@@ -71,149 +71,35 @@ for l, mod in enumerate(mode):
                 if exp_name == "AFall":
                     exp_name = "allAF"
                 else: 
-                    exp_name = "confidentAF"
+                    exp_name = "reliableAF"
                 
-                if mod != "reg" or rat == "large" or exp_name == "allAF" or clu == "No":
-                    for fold in result_info.values():
-                        for key, value in fold.items():
-                            #print(key, value)
-                            if eval_metric == "mis":
-                                if key == "TP":
-                                    tmp = value
-                                if key == "FP":
-                                    all_results[j,i] = tmp/(value+tmp)
-                                    if mod == "spatial":
-                                        result_list_1.append(tmp/(value+tmp))
-                                        exp_names.append(f'{exp_name}_{clu}_{rat}')
-                                    else: 
-                                        result_list_2.append(tmp/(value+tmp))
-                            if key == eval_metric:
-                                all_results[j,i] = value
-                                if mod == "spatial":
-                                    result_list_1.append(value)
+                #if mod != "reg" or rat == "large" or exp_name == "allAF" or clu == "No":
+                for fold in result_info.values():
+                    for key, value in fold.items():
+                        #print(key, value)
+                        if eval_metric == "mis":
+                            if key == "TP":
+                                tmp = value
+                            if key == "FP":
+                                all_results[j,i] = tmp/(value+tmp)
+                                if mod == "spatial0":
+                                    result_list_1.append(tmp/(value+tmp))
                                     exp_names.append(f'{exp_name}_{clu}_{rat}')
                                 else: 
-                                    result_list_2.append(value)
+                                    result_list_2.append(tmp/(value+tmp))
+                        if key == eval_metric:
+                            all_results[j,i] = value
+                            if mod == "spatial0":
+                                result_list_1.append(value)
+                                exp_names.append(f'{exp_name}_{clu}_{rat}')
+                            else: 
+                                result_list_2.append(value)
 
-                        j += 1
-                # hardcode the results for the datasets which overfit for DeepReg
-                elif eval_metric == "AU-ROC" and rat == "norm":
-                    for _ in range(5):    
-                        if _ == 0:
-                            all_results[j,i] = 0.3229
-                        elif _ == 1:
-                            all_results[j,i] = 0.3686
-                        elif _ == 2:
-                            all_results[j,i] = 0.3643
-                        elif _ == 3:
-                            all_results[j,i] = 0.3705
-                        elif _ == 4:
-                            all_results[j,i] = 0.4562
-                        result_list_2.append(all_results[j,i])
-                        j += 1
-                elif eval_metric == "AU-ROC" and rat == "small":
-                    for _ in range(5):    
-                        if _ == 0:
-                            all_results[j,i] = 0.5021
-                        elif _ == 1:
-                            all_results[j,i] = 0.4247
-                        elif _ == 2:
-                            all_results[j,i] = 0.2657
-                        elif _ == 3:
-                            all_results[j,i] = 0.7681
-                        elif _ == 4:
-                            all_results[j,i] = 0.3374
-                        result_list_2.append(all_results[j,i])
-                        j += 1
+                    j += 1
 
-                elif eval_metric == "AU-PRC" and rat == "norm":
-                    for _ in range(5):    
-                        if _ == 0:
-                            all_results[j,i] = 0.1789
-                        elif _ == 1:
-                            all_results[j,i] = np.nan
-                        elif _ == 2:
-                            all_results[j,i] = np.nan
-                        elif _ == 3:
-                            all_results[j,i] = np.nan
-                        elif _ == 4:
-                            all_results[j,i] = 0.2176
-                        result_list_2.append(all_results[j,i])
-                        j += 1
-                elif eval_metric == "AU-PRC" and rat == "small":
-                    for _ in range(5):    
-                        if _ == 0:
-                            all_results[j,i] = 0.1556
-                        elif _ == 1:
-                            all_results[j,i] = 0.1344
-                        elif _ == 2:
-                            all_results[j,i] = 0.1084
-                        elif _ == 3:
-                            all_results[j,i] = 0.3321
-                        elif _ == 4:
-                            all_results[j,i] = np.nan
-                        result_list_2.append(all_results[j,i])
-                        j += 1
-
-                elif eval_metric == "MCC" and rat == "norm":
-                    for _ in range(5):    
-                        if _ == 0:
-                            all_results[j,i] = -0.0993
-                        elif _ == 1:
-                            all_results[j,i] = np.nan
-                        elif _ == 2:
-                            all_results[j,i] = np.nan
-                        elif _ == 3:
-                            all_results[j,i] = np.nan
-                        elif _ == 4:
-                            all_results[j,i] = -0.0763
-                        result_list_2.append(all_results[j,i])
-                        j += 1
-
-                elif eval_metric == "MCC" and rat == "small":
-                    for _ in range(5):    
-                        if _ == 0:
-                            all_results[j,i] = -0.0569
-                        elif _ == 1:
-                            all_results[j,i] = 0.0549
-                        elif _ == 2:
-                            all_results[j,i] = -0.1253
-                        elif _ == 3:
-                            all_results[j,i] = 0.1919
-                        elif _ == 4:
-                            all_results[j,i] = np.nan
-                        result_list_2.append(all_results[j,i])
-                        j += 1
-
-                elif eval_metric == "mis" and rat == "small":
-                    for _ in range(5):    
-                        if _ == 0:
-                            all_results[j,i] = 0.1
-                        elif _ == 1:
-                            all_results[j,i] = 0.1724
-                        elif _ == 2:
-                            all_results[j,i] = 0.02899
-                        elif _ == 3:
-                            all_results[j,i] = 0.3768
-                        elif _ == 4:
-                            all_results[j,i] = 0
-                        result_list_2.append(all_results[j,i])
-                        j += 1
-                
-                elif eval_metric == "mis" and rat == "norm":
-                    for _ in range(5):    
-                        if _ == 0:
-                            all_results[j,i] = 0.2286
-                        elif _ == 1:
-                            all_results[j,i] = np.nan
-                        elif _ == 2:
-                            all_results[j,i] = np.nan
-                        elif _ == 3:
-                            all_results[j,i] = np.nan
-                        elif _ == 4:
-                            all_results[j,i] = 0.2116
-                        result_list_2.append(all_results[j,i])
-                        j += 1
+#print(all_results)
+print(result_list_1)
+print(result_list_2)
 
 statistic, p_value = wilcoxon(result_list_1, result_list_2)
 print(f"Wilcoxon test statistic: {statistic}")
@@ -222,9 +108,8 @@ print(f"Wilcoxon test p-value: {p_value}")
 avg_scores = np.zeros((4,2))
 std_scores = np.zeros((4,2))
 wilco = np.zeros((4))
-print(avg_scores)
 print("result all", wilcoxon(result_list_1[30:], result_list_2[30:]))
-print("result confident", wilcoxon(result_list_1[:30], result_list_2[:30]))
+print("result reliable", wilcoxon(result_list_1[:30], result_list_2[:30]))
 for i in range(len(clust)*len(exps)):
     num = 15
     statistic, p_value = wilcoxon(result_list_1[i*15:i*15+15], result_list_2[i*15:i*15+15])
@@ -248,7 +133,7 @@ plt.rcParams["font.serif"] = ["Times New Roman"]
 x = np.arange(4)
 bars1 = plt.bar(x, avg_scores[:,0], yerr=std_scores[:,0], width=0.4, label="StrucTFactor", color="lightskyblue")
 bars2 = plt.bar(x+0.4, avg_scores[:,1], yerr=std_scores[:,1], width=0.4, label="DeepTFactor", color="grey")
-plt.xticks(x+0.2, ["confidentAF 30%", "confidentAF 100%", "allAF 30%", "allAF 100%"], rotation=0)
+plt.xticks(x+0.2, ["reliableAF 30%", "reliableAF 100%", "allAF 30%", "allAF 100%"], rotation=0)
 plt.xlabel("Experiment")
 plt.ylabel(f"Average {eval_metric}")
 plt.legend(loc="lower right")
@@ -298,6 +183,4 @@ for i, (bar1, bar2) in enumerate(zip(bars1, bars2)):
 
 plt.tight_layout()
 
-plt.savefig(f"../plots/avg_scores_with_pvalue_{eval_metric}.png")
-
-exit()
+plt.savefig(f"../plots/pvalue_{eval_metric}.png")
