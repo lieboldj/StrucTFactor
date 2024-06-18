@@ -398,9 +398,11 @@ def evaluate_model(seq_ids, labels, scores, needed, output_dir, fold):
         plt.savefig(f'{output_dir}/ROC_F{fold}.png')
         with open(f'{output_dir}/result_info.txt', createOrAdd) as fp:
             fp.write(f'Fold: {fold}\n')
-            fp.write("One of the values is 0, so the accuracy, sensitivity, specificity and recall can't be calculated\n")
+            fp.write(f'accuracy: {np.nan}, sensitivity: {np.nan}, specificity: {np.nan}, recall: {np.nan}\n')
             fp.write(f'TP: {TP}\tFP: {FP}\nTN: {TN}\tFN: {FN}\n')
             fp.write(f'ROC curve (area = {roc_auc:0.4f})\n')
+            fp.write(f'AUPRC (AP): {np.nan}\n')
+            fp.write(f'MCC: {np.nan}\n')
             fp.write("\n\n")
 
         return np.array([TP, TN, FP, FN, roc_auc, 0, 0])
