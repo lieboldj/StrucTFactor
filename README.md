@@ -1,4 +1,4 @@
-# Transcription factor prediction using protein 3D structures
+# Transcription factor prediction using protein 3D secondary structures
 ![Image](StrucTFactorOverview.png)
 
 ## Abstract
