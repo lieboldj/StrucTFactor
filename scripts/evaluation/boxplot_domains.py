@@ -6,8 +6,8 @@ from scipy.stats import mannwhitneyu
 
 show_details = False
 
-plt.rcParams["font.family"] = "DejaVu Serif"
-plt.rcParams["font.serif"] = ["Times New Roman"]
+plt.rcParams["font.family"] = "DejaVu Sans"
+#plt.rcParams["font.serif"] = ["Times New Roman"]
 plt.rcParams["font.size"] = 12
 # Read the data
 df = pd.read_csv('d_rl_nr_3_domain.csv')

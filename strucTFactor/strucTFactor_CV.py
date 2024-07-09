@@ -184,5 +184,6 @@ if __name__ == '__main__':
         fp.write(f'MCC: {MCC_middle}\n')
         fp.write("\n\n")
 
-
+# delete basestate model
+os.remove(f'{output_dir}basestate_model.pt')
 

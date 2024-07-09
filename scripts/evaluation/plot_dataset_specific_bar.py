@@ -40,9 +40,9 @@ else:
     ratio = ["norm","small","large"]#,"small","large"]
 
 
-clust = ["03","No"]
+clust = ["03"]#,"No"]
 #ratio = ["norm","small","large"]#,"small","large"]
-exps = ["CV_AFall_expTFs_clu"]#, "CV_AFall_expTFs_clu"]#,"CV_AFfiltered_expTFs_clu"]
+exps = ["CV_AFfiltered_expTFs_clu"]#, "CV_AFall_expTFs_clu"]#,"CV_AFfiltered_expTFs_clu"]
 tfs = ["_Com"]
 tf = tfs[0]
 mode = ["spatial0","seq0","reg"]
@@ -114,10 +114,11 @@ print("P-value StrucTFactor and DeepTFactor:", p_value_1_2)
 print("P-value between StrucTFactor and DeepReg:", p_value_1_3)
 print("P-value between DeepTFactor and DeepReg:", p_value_2_3)
 
+plt.rcParams["font.family"] = "DejaVu Sans"
+#plt.rcParams["font.serif"] = ["Times New Roman"]
+plt.rcParams["font.size"] = 18
+
 if fold_plot:
-    plt.rcParams["font.family"] = "DejaVu Serif"
-    plt.rcParams["font.serif"] = ["Times New Roman"]
-    plt.rcParams["font.size"] = 18
     # Create the data DataFrame
     data = pd.DataFrame(all_results,
                     index=[f'{clu}_{rat}_{i}' for clu in clust for rat in ratio for i in range(1, 6)],
@@ -152,9 +153,6 @@ if fold_plot:
     plt.savefig(f"../plots/Paper/STF_DTF_DReg_{eval_metric}_{exps[0].split('_')[1]}{tf}_{clust[0]}_{ratio[0]}_folds.pdf")
 
 if bar_plot:
-    plt.rcParams["font.family"] = "DejaVu Serif"
-    plt.rcParams["font.serif"] = ["Times New Roman"]
-    plt.rcParams["font.size"] = 18
     # Create the data DataFrame
     data = pd.DataFrame(all_results,
                     index=[f'{clu}_{rat}_{i}' for clu in clust for rat in ratio for i in range(1, 6)],

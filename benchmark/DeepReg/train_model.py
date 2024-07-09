@@ -38,7 +38,6 @@ from tensorflow.keras import backend as K
 from tensorflow.keras import layers
 from tensorflow.keras.layers import TimeDistributed
 
-import gc
 
 #%%
 

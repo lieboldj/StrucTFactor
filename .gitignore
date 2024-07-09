@@ -28,3 +28,4 @@ scripts/evaluation/results_latex*
 scripts/evaluation/wil.py
 scripts/evaluation/plot_dataset_specific_bar_deepstruct.py
 test_data/
+test*

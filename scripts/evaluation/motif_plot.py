@@ -28,8 +28,8 @@ def parse_fasta(filename):
 def extract_sequence_from_fasta(sequences, sequence_id):
     return sequences.get(sequence_id, None)
 
-plt.rcParams["font.family"] = "DejaVu Serif"
-plt.rcParams["font.serif"] = ["Times New Roman"]
+plt.rcParams["font.family"] = "DejaVu Sans"
+#plt.rcParams["font.serif"] = ["Times New Roman"]
 plt.rcParams["font.size"] = 18
 
 clu = "03" #"03" #"No"
