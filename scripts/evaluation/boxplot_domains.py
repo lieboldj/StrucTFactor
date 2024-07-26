@@ -6,8 +6,8 @@ from scipy.stats import mannwhitneyu
 
 show_details = False
 
-plt.rcParams["font.family"] = "DejaVu Sans"
-#plt.rcParams["font.serif"] = ["Times New Roman"]
+plt.rcParams["font.family"] = 'DeJavu Serif'#"DejaVu Sans"
+plt.rcParams["font.serif"] = ["Times New Roman"]
 plt.rcParams["font.size"] = 12
 # Read the data
 df = pd.read_csv('d_rl_nr_3_domain.csv')
@@ -91,7 +91,7 @@ ax.set_xlabel("Method", labelpad=10)
 plt.tight_layout()
 if not os.path.exists("../plots/Paper"):
     os.makedirs("../plots/Paper")
-plt.savefig("../plots/Paper/domain_boxplot.pdf")
+plt.savefig("../plots/Figure5.pdf", format='pdf')
 #print(np.median(domains_struct), np.median(domains_seq), np.median(no_domains_struct), np.median(no_domains_seq))
 #print(np.mean(domains_struct), np.mean(domains_seq), np.mean(no_domains_struct), np.mean(no_domains_seq))
 

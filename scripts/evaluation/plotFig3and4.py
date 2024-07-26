@@ -3,9 +3,6 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import os
 import re
-import sys
-from scipy.stats import wilcoxon
-from matplotlib.backends.backend_pdf import PdfPages
 
 def extract_info(text):
     info = {}
@@ -33,6 +30,7 @@ eval_metrics = ["AU-ROC", "AU-PRC", "MCC"]
 plot = True
 fold_plot = True
 ratio = ["norm", "small", "large"]
+save_format = "eps"
 clust = ["03"]
 exps = ["CV_AFfiltered_expTFs_clu"]
 tfs = ["_Com"]
@@ -49,6 +47,9 @@ all_results = np.zeros((len(clust) * len(ratio) * 5, len(mode) * len(exps)))
 #with PdfPages('../plots/combined_plots.pdf') as pdf:
 # start a 2x2 subplot
 if True:
+    plt.rcParams['font.family'] = 'DeJavu Serif'
+    plt.rcParams['font.serif'] = ['Times New Roman']
+    plt.rcParams["font.size"] = 18
     fig, axs = plt.subplots(2, 2, figsize=(10, 7.5))
     for k, eval_metric in enumerate(eval_metrics):
         for l, mod in enumerate(mode):
@@ -96,8 +97,6 @@ if True:
                         start_fold = fold['fold'] + 1
 
         # Plotting
-        plt.rcParams["font.family"] = "DejaVu Sans"
-        plt.rcParams["font.size"] = 18
         fontsize = 16
         data = pd.DataFrame(all_results,
                                 index=[f'{clu}_{rat}_{i}' for clu in clust for rat in ratio for i in range(1, 6)],
@@ -117,6 +116,7 @@ if True:
             #data.plot(kind='bar', ax=axs[0,0], rot=0, color=['blue', 'darkorange', 'darkseagreen'])
             axs[ax_idx].set_xticks(range(5), range(1, 6))
             axs[ax_idx].set_xticklabels(range(1, 6), fontsize=fontsize)
+            axs[ax_idx].set_xlabel(f"Test set", labelpad=10, fontsize=fontsize)
         
         if len(ratio) == 3:
             # Calculate the average and standard deviation for the desired index ranges
@@ -168,8 +168,8 @@ if True:
     #plt.close()
     plt.tight_layout()
     if len(ratio) == 1:
-        plt.savefig('../plots/Figure3.pdf')
+        plt.savefig(f'../plots/Figure3.{save_format}', format=save_format)
     else:
-        plt.savefig('../plots/Figure4.pdf')
+        plt.savefig(f'../plots/Figure4.{save_format}', format=save_format)
 
 print("Combined PDF saved successfully.")

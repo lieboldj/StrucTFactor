@@ -28,8 +28,8 @@ def parse_fasta(filename):
 def extract_sequence_from_fasta(sequences, sequence_id):
     return sequences.get(sequence_id, None)
 
-plt.rcParams["font.family"] = "DejaVu Sans"
-#plt.rcParams["font.serif"] = ["Times New Roman"]
+plt.rcParams["font.family"] = 'DeJavu Serif'#"DejaVu Sans"
+plt.rcParams["font.serif"] = ["Times New Roman"]
 plt.rcParams["font.size"] = 18
 
 clu = "03" #"03" #"No"
@@ -87,4 +87,5 @@ for idx, p in df.iterrows():
         #ax2.set_ylabel('Integrated gradient score')
 
         fig.text(-0.04, 0.5, 'Integrated gradient score', va='center', rotation='vertical')
-        fig.savefig(f"../plots/Paper/{p.ID}_motif.pdf", bbox_inches='tight')
+        fig.savefig(f"../plots/Figure6.eps", format='eps', bbox_inches='tight')
+        #fig.savefig(f"../plots/Paper/{p.ID}_motif.pdf", bbox_inches='tight')
