@@ -45,6 +45,7 @@ if __name__ == '__main__':
     training = options.training
     learning_rate = options.learning_rate
     es = options.early_stop
+    epochs = options.epochs
     start_time = time.perf_counter()
 
     if not os.path.exists(output_dir):
@@ -114,7 +115,7 @@ if __name__ == '__main__':
 
         if training:
             batch_size = batch_size
-            epoch_number = 50
+            epoch_number = epochs
             early_stopping = 0
             survailence_list = []
             prev_vali_loss, best_vali_loss = 1000, 1000

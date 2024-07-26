@@ -49,4 +49,6 @@ def argument_parser(version=None):
                         help='Spatial mode: 0 for no spatial, 1 for spatial, 3 for spatial with Filters times 3')
     parser.add_argument('-es', '--early_stop', required=False, type=int, default=5,
                         help='Early stop epoch') 
+    parser.add_argument('-e', '--epochs', required=False, type=int, default=50,
+                        help='Number of epochs') 
     return parser
