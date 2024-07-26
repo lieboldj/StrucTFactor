@@ -77,7 +77,7 @@ class Attention_A2(Layer):
     
 class CNN_LSTM:
 
-    def loading():
+    def loading(lr=0.001):
         aa_shape = 21
         input_shape = (1000, aa_shape, 1)
         ###################### FIRST CNN #####################################
@@ -181,7 +181,7 @@ class CNN_LSTM:
         model = Model(inputs = [model_1.input, model_2.input, model_3.input, model_4.input], outputs = output)
         
         #model = Model(inputs = [model_1.input, model_2.input], outputs = output)
-        opt = keras.optimizers.Adam(learning_rate = 0.001)
+        opt = keras.optimizers.Adam(learning_rate = lr)
         #opt = keras.optimizers.SGD(learning_rate = initial_learning_rate)
         model.compile(loss = 'binary_crossentropy',
                       optimizer = opt,
@@ -482,8 +482,9 @@ if __name__ == "__main__":
     padded_seq_test = data_inference.tokens(clean_seq_test)
     indexes = np.arange(len(clean_seq_test))
     k = 5
-    batch_size = 128
-    epochs = 50
+    batch_size = int(sys.argv[4])#128
+    epochs = int(sys.argv[5])#50
+    learning_rate = float(sys.argv[6])#0.001
 
     skf = StratifiedKFold(n_splits=k, shuffle=True, random_state=42)
     contbl = np.zeros(7)
@@ -503,14 +504,14 @@ if __name__ == "__main__":
 
             estop = tf.keras.callbacks.EarlyStopping(monitor='val_loss', patience=10, verbose=1)
             model_checkpoint_callback = tf.keras.callbacks.ModelCheckpoint(
-                f'results/{exp[:-6]}/fold{fold}.keras',
+                f'results/{exp[:-6]}_{batch_size}_{epochs}_{learning_rate}/fold{fold}.keras',
                 save_weights_only=False,
                 monitor='val_accuracy',
                 mode='max',
                 verbose=1,
                 save_best_only=True)
             #model = load_model('saved_model.h5')
-            model = CNN_LSTM.loading()
+            model = CNN_LSTM.loading(lr=learning_rate)
 
             # Reinitialize all the weights of the model
             #for ix, layer in enumerate(model.layers):
@@ -536,12 +537,12 @@ if __name__ == "__main__":
                         #callbacks = [model_checkpoint_callback, estop]
                         )
             print("Test")
-            #model = load_model(f'results/{exp[:-6]}_fold{fold}.keras')
+            model = load_model(f'results/{exp[:-6]}_{batch_size}_{epochs}_{learning_rate}/fold{fold}.keras')
 
             # predict
             predictions = model.predict([tf.expand_dims(padded_seq_test[x_test], -1),tf.expand_dims(padded_seq_test[x_test], -1),tf.expand_dims(padded_seq_test[x_test], -1),tf.expand_dims(padded_seq_test[x_test], -1)])
 
-            contbl = np.add(contbl, evaluate_model(map[x_test], labels[x_test], predictions, 0, f'./results/{exp[:-6]}/', fold))
+            contbl = np.add(contbl, evaluate_model(map[x_test], labels[x_test], predictions, 0, f'./results/{exp[:-6]}_{batch_size}_{epochs}_{learning_rate}/', fold))
             print("tested")
     # temporary mean over the folds (seperate aggregated used)
     contbl = contbl / k
@@ -561,11 +562,11 @@ if __name__ == "__main__":
     print(f'accuracy: {accuracy:0.4f}, sensitivity: {sensitivity:0.4f}, specificity: {specificity:0.4f}, recall: {recall:0.4f}')
 
 
-    with open(f'results/{exp[:-6]}/result_info.txt', 'a') as fp:
-        fp.write(f'Fold: all; Time for run: 0 \n')
-        fp.write(f'accuracy: {accuracy:0.4f}, sensitivity: {sensitivity:0.4f}, specificity: {specificity:0.4f}, recall: {recall:0.4f}\n')
-        fp.write(f'TP: {TP}\tFP: {FP}\nTN: {TN}\tFN: {FN}\n')
-        fp.write(f'ROC curve (area = {roc_auc:0.4f})\n')
-        fp.write(f'AUPRC (AP): {AUPRC:0.4f})\n')
-        fp.write(f'MCC: {MCC_middle}\n')
-        fp.write("\n\n")
+    #with open(f'results/{exp[:-6]}/result_info.txt', 'a') as fp:
+    #    fp.write(f'Fold: all; Time for run: 0 \n')
+    #    fp.write(f'accuracy: {accuracy:0.4f}, sensitivity: {sensitivity:0.4f}, specificity: {specificity:0.4f}, recall: {recall:0.4f}\n')
+    #    fp.write(f'TP: {TP}\tFP: {FP}\nTN: {TN}\tFN: {FN}\n')
+    #    fp.write(f'ROC curve (area = {roc_auc:0.4f})\n')
+    #    fp.write(f'AUPRC (AP): {AUPRC:0.4f})\n')
+    #    fp.write(f'MCC: {MCC_middle}\n')
+    #    fp.write("\n\n")
