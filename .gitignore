@@ -12,6 +12,7 @@ strucTFactor/explain_AI_iso*
 strucTFactor/run_cross_valN*
 strucTFactor/model.pt
 strucTFactor/*.pdf
+strucTFactor/pdfs
 strucTFactor/tmp*
 DeepLearning-_TF/
 analyse_Exp*
