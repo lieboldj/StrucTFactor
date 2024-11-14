@@ -50,7 +50,8 @@ if __name__ == '__main__':
     clu = "clu" + setting.split("_")[0]
     ratio = setting.split("_")[1]
     mode = "spatial" # change to "seq" for DeepTFactor comparison
-    filename = f"../data/{datasettype}/{setting}.fasta"# write your proteins of choice in a fasta, e.g. f"../data/test_seqs.fasta"
+    #filename = f"../data/{datasettype}/{setting}.fasta"# write your proteins of choice in a fasta, e.g. f"../data/test_seqs.fasta"
+    filename = f"../data/test_seqs.fasta"
 
     secondary_pre = "../results/"
     spatial_file_sec = '../data/uniprot/04_final/AFall_spatial_str.tsv' # to get spatial information for all seqs 

@@ -2,6 +2,8 @@ import os
 import random
 # import basic python packages
 import numpy as np
+# if you cannot install scikit-learn Version <= 0.21 you can use pickle as workaround
+#import pickle
 import pandas as pd
 import matplotlib.pyplot as plt
 
@@ -88,8 +90,18 @@ if __name__ == '__main__':
     model = DeepTFactor(spatial_mode, out_features=[1])
     model = model.to(device)
     cutoff = 0.5
+    # in case you cannot install scikit-learn V 0.21 you can create the splits in advance to reproduce results and load them here
+    #split_dir = output_dir.split('/')[-1]
+    #dataset_id = split_dir.split('_')[1]
+    #clust_id = split_dir.split('_')[3][3:]
+    #size_id = split_dir.split('_')[4]
+
+    #with open(f'./../data/{dataset_id}/{clust_id}_{size_id}.pkl', 'rb') as f:
+    #    splits = pickle.load(f)
+
     # Seperation into folds
     for fold, [train_vali_idx, x_test] in enumerate(skf.split(indexes, labels)):
+    #for fold, [train_vali_idx, x_test] in enumerate(splits):
         print(f"crossvalidationfold: {fold}")
         x_train, x_vali, y_train, y_vali = train_test_split(indexes[train_vali_idx], labels[train_vali_idx], test_size=.1, random_state=42, stratify= labels[train_vali_idx])
         if spatial_file != None:
