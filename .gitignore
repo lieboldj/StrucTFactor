@@ -1,5 +1,7 @@
 __pycache__/
 scripts/plots/
+benchmark/DeepReg/run_deepreg_human*
+benchmark/DeepReg/train_model_version*
 data/
 results/
 pdb_cov/
@@ -27,6 +29,10 @@ scripts/evaluation/*.sh
 scripts/evaluation/*.tex
 scripts/evaluation/results_latex*
 scripts/evaluation/wil.py
+scripts/evaluation/plotFig4_all.py
 scripts/evaluation/plot_dataset_specific_bar_deepstruct.py
+scripts/evaluation/bioinf_tables*
 test_data/
 test*
+benckmark/transfacpred/
+webserver
