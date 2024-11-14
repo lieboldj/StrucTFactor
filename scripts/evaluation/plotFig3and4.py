@@ -30,7 +30,7 @@ eval_metrics = ["AU-ROC", "AU-PRC", "MCC"]
 plot = True
 fold_plot = True
 ratio = ["norm", "small", "large"]
-save_format = "eps"
+save_format = "pdf"
 clust = ["03"]
 exps = ["CV_AFfiltered_expTFs_clu"]
 tfs = ["_Com"]
@@ -155,7 +155,18 @@ if True:
         elif eval_metric == "AU-ROC":
             axs[ax_idx].axhline(y=0.5, color='black', linewidth=2)
             axs[ax_idx].text(-0.5, 0.48, '50%', fontsize=12, ha='right')
-        
+        elif eval_metric == "AU-PRC" and (len(ratio) == 3 or len(ratio) == 4):
+            # Define x positions for each line based on where the bars are located
+            group_width = 0.6  # Adjust as necessary to match the width of each bar group
+
+            # Add lines for each group separately
+            axs[ax_idx].plot([-0.3, -0.3 + group_width], [0.25, 0.25], color='black', linewidth=2)  # First group
+            axs[ax_idx].plot([-0.3 + 1, -0.3 + 1 + group_width], [0.167, 0.167], color='black', linewidth=2)  # Second group
+            axs[ax_idx].plot([-0.3 + 2, -0.3 + 2 + group_width], [0.09, 0.09], color='black', linewidth=2)  # Third group
+        elif eval_metric == "AU-PRC" and len(ratio) == 1:
+            axs[ax_idx].axhline(y=0.25, color='black', linewidth=2)
+            axs[ax_idx].text(-0.5, 0.24, '25%', fontsize=12, ha='right')
+
         axs[ax_idx].set_ylabel(eval_metric, labelpad=10, fontsize=fontsize)
 
     # Create legend separately
