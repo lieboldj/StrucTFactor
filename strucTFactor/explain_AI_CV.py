@@ -1,14 +1,10 @@
 import os
-import random
 # import basic python packages
 import numpy as np
 import pandas as pd
 # import torch packages
 import torch
-import torch.nn as nn
-import torch.optim as optim
 from torch.utils.data import DataLoader
-import seaborn as sns
 from deeptfactor.process_data import read_fasta_data
 from deeptfactor.process_data import read_fasta_data_spatial
 from deeptfactor.data_loader import EnzymeDataset
@@ -16,11 +12,6 @@ from deeptfactor.data_loader import EnzymeDataset_spatial
 from deeptfactor.utils import argument_parser
 from deeptfactor.models import DeepTFactor
 import captum.attr as captum_attr
-import matplotlib.pyplot as plt
-from matplotlib.colors import ListedColormap, BoundaryNorm, LinearSegmentedColormap
-import seaborn as sns
-from scipy.stats import mannwhitneyu
-import matplotlib.patches as mpatches
 from tqdm import tqdm
 
 def scoring_function(values_list):
@@ -83,9 +74,9 @@ if __name__ == '__main__':
     
     clu = "clu" + setting.split("_")[0]
     ratio = setting.split("_")[1]
-    if not os.path.exists(f"../data/Fold_0_sequences_{setting}_{datasettype}.fasta"):
+    if True:#not os.path.exists(f"../data/Fold_0_sequences_{setting}_{datasettype}.fasta"):
         # Read the data file to get folds
-        with open(f'../results/CV_{datasettype}_expTFs_{clu}_{ratio}_spatial_Com/prediction_result.tsv', 'r') as data_file:
+        with open(f'../results/CV_{datasettype}_expTFs_{clu}_{ratio}_spatial0_Com/prediction_result.tsv', 'r') as data_file:
             data_lines = data_file.readlines()
 
         fold_start_indices = [i for i, line in enumerate(data_lines) if line.startswith('Fold')]
@@ -150,7 +141,7 @@ if __name__ == '__main__':
     torch.set_num_threads(num_cpu)
     kernel_size = 1
     #clu = "03"
-    not_preproc = False
+    not_preproc = True
     if not_preproc:
         for foldID in range(5):
             filename = f"Fold_{foldID}_sequences_{setting}_{datasettype}.fasta"

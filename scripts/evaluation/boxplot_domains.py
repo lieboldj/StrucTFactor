@@ -10,8 +10,7 @@ plt.rcParams["font.family"] = 'DeJavu Serif'#"DejaVu Sans"
 plt.rcParams["font.serif"] = ["Times New Roman"]
 plt.rcParams["font.size"] = 12
 # Read the data
-df = pd.read_csv('d_rl_nr_3_domain.csv')
-
+df = pd.read_csv('../../strucTFactor/tmp_all_df_clu03_paper.csv')
 domains_struct = []
 domains_seq = []
 no_domains_struct = []
@@ -23,7 +22,7 @@ for idx, p in df.iterrows():
     domain_list = np.array([float(i) for i in domain_list_pre])
     nums = np.where(domain_list == 1.)
     if len(nums[0]) != 0:
-        
+
         secondary_list_pre = p.secondary.lstrip("[ ").rstrip(" ]").split()
         secondary_list = [float(i) for i in secondary_list_pre]
 
@@ -95,5 +94,5 @@ plt.savefig("../plots/Figure5.pdf", format='pdf')
 #print(np.median(domains_struct), np.median(domains_seq), np.median(no_domains_struct), np.median(no_domains_seq))
 #print(np.mean(domains_struct), np.mean(domains_seq), np.mean(no_domains_struct), np.mean(no_domains_seq))
 
-print(mannwhitneyu(domains_struct,  no_domains_struct), mannwhitneyu(domains_seq, no_domains_seq))
-print(mannwhitneyu(domains_struct,  domains_seq), mannwhitneyu(no_domains_struct, no_domains_seq))
+#print(mannwhitneyu(domains_struct,  no_domains_struct), mannwhitneyu(domains_seq, no_domains_seq))
+#print(mannwhitneyu(domains_struct,  domains_seq), mannwhitneyu(no_domains_struct, no_domains_seq))

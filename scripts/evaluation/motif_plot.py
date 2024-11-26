@@ -36,6 +36,7 @@ clu = "03" #"03" #"No"
 
 #df = pd.read_csv(f'./tmp_special_df_clu03_paper.csv', header=0) # change to the csv file
 df = pd.read_csv(f'./d_rl_nr_3_domain.csv', header=0) # change to the csv file
+df = pd.read_csv('../../strucTFactor/tmp_all_df_clu03_paper.csv', header=0)
 protein_data_file = f'../../data/uniprot/04_final/AFall_seqs.fasta' # change to your fasta file
 
 sequences = parse_fasta(protein_data_file)
@@ -87,5 +88,6 @@ for idx, p in df.iterrows():
         #ax2.set_ylabel('Integrated gradient score')
 
         fig.text(-0.04, 0.5, 'Integrated gradient score', va='center', rotation='vertical')
+        #fig.savefig(f"{p.ID}_motif.png", format='png', bbox_inches='tight', dpi=600)
         fig.savefig(f"../plots/Figure6.eps", format='eps', bbox_inches='tight')
         #fig.savefig(f"../plots/Paper/{p.ID}_motif.pdf", bbox_inches='tight')
