@@ -30,12 +30,12 @@ conda activate stf
 If you want to benchmark with DeepReg, please install tensorflow.
 
 ## Predict TF/non-TF for a pdb file
-Given a pdb file, you run the following to predict whether this protein is a TF: 
+Given a pdb file with one protein, you run the following to predict whether this protein is a TF: 
 ```bash
 cd strucTFactor
-python predictTFwithStrucTFactor.py -i <pdb_file>
+python predictTFwithStrucTFactor.py -i example.pdb
 ```
-The result will be printed in your terminal and written in _output.csv_.
+The result will be printed in your terminal and written in _output.csv_. Replace _example.pdb_ with the name of your PDB file that contains a single protein.
 
 ## Reproducing results in paper
 ### Option 1: Download complete dataset:
@@ -75,8 +75,7 @@ Here, you can execute the programm of your choice (```./run_all_data.sh```, ```.
 This work is licensed under a Creative Commons Attribution 4.0 International Public License.
 
 ## Reference
-Liebold J., Neuhaus F., Geiser J., Kurtz S., Baumbach J., Newaz K. (2024). Transcription factor prediction using protein 3D secondary structures.
-
+Liebold J., Neuhaus F., Geiser J., Kurtz S., Baumbach J., Newaz K, Transcription factor prediction using protein 3D secondary structures, Bioinformatics, 2025, https://doi.org/10.1093/bioinformatics/btae762
 
 *Corresponding author:*
 

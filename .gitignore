@@ -6,7 +6,7 @@ data/
 results/
 pdb_cov/
 strucTFactor/deeptfactor/models_collection.py
-strucTFactor/predictions/
+strucTFactor/predictions*
 strucTFactor/AI_isoform/
 strucTFactor/lstm_classifier.py
 strucTFactor/predictTFwithStrucTFactor_*

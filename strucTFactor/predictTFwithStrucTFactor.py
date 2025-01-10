@@ -1,5 +1,5 @@
 # given a pdb file as argument, this file predict, whether it is an transcription factor or not. 
-# you can choose your own pre-trainefd model or take the default model
+# you can choose your own pre-trained model or take the default model
 # run it via: python predictTFwithStrucTFactor.py -i example.pdb -o output.csv -ckpt strucTFactor_model.pt -g cuda:0
 import torch
 from torch.utils.data import DataLoader
@@ -86,7 +86,7 @@ if __name__ == '__main__':
             x = x.type(torch.FloatTensor)
             output = model(x.to(device))
             prediction = output.cpu()
-    if prediction > cutoff:
+    if prediction.item() > cutoff:
         print(f"Prediction for {seq_ids}: Transcription Factor")
     else:
         print(f"Prediction for {seq_ids}: Not a Transcription Factor")
